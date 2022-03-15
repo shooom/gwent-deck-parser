@@ -1,6 +1,7 @@
 package com.parser.gwentdeckparser.deckGraber;
 
 import okhttp3.*;
+import okio.BufferedSource;
 import org.springframework.stereotype.Component;
 
 import java.io.IOException;
@@ -35,7 +36,7 @@ public class GwentClient {
         return resp.body().string();
     }
 
-    public String deck(long deckId, String locale) throws IOException {
+    public BufferedSource deck(long deckId, String locale) throws IOException {
         //TODO https://www.playgwent.com/ru/decks/api/guides/282083
 
         var req = new Request.Builder()
@@ -43,6 +44,6 @@ public class GwentClient {
                 .build();
         Call call = client.newCall(req);
         Response resp = call.execute();
-        return resp.body().string();
+        return resp.body().source();
     }
 }

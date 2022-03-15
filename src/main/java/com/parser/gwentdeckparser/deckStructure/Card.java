@@ -3,6 +3,8 @@ package com.parser.gwentdeckparser.deckStructure;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+import java.util.List;
+
 @Data
 @NoArgsConstructor
 public class Card {
@@ -18,7 +20,7 @@ public class Card {
     private int power;
     private int provisionsCost;
     private int armour;
-    private int primaryCategoryId;
-    private int[] categoryIds;
-    private CardTooltip[] tooltip;
+    private Integer primaryCategoryId;
+    private List<Integer> categoryIds;
+    private List<List<CardTooltip>> tooltip;
 }

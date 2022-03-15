@@ -1,6 +1,7 @@
 package com.parser.gwentdeckparser.api;
 
 import com.parser.gwentdeckparser.deckGraber.DeckParserService;
+import com.parser.gwentdeckparser.deckStructure.Guide;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.*;
 
@@ -23,8 +24,7 @@ public class ParserController {
     }
 
     @GetMapping("/{deckId}")
-    public String getDeck(@PathVariable(value = "deckId") long deckId) throws IOException {
+    public Guide getDeck(@PathVariable(value = "deckId") long deckId) throws IOException {
         return service.getDeck(deckId);
     }
-
 }
