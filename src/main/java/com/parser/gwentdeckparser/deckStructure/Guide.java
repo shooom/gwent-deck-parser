@@ -9,6 +9,7 @@ public class Guide {
     private long id;
     private String name;
     private String author;
+    private String language;
     private int votes;
     private Faction faction;
     private int craftingCost;
