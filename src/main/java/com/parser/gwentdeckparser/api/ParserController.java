@@ -1,8 +1,8 @@
 package com.parser.gwentdeckparser.api;
 
 import com.parser.gwentdeckparser.deckGraber.DeckParserService;
-import com.parser.gwentdeckparser.deckStructure.Guide;
-import com.parser.gwentdeckparser.deckStructure.GuideList;
+import com.parser.gwentdeckparser.deckStructure.guide.Guide;
+import com.parser.gwentdeckparser.deckStructure.guide.GuideList;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.*;
 import java.io.IOException;

@@ -3,6 +3,8 @@ package com.parser.gwentdeckparser.deckGraber;
 import com.parser.gwentdeckparser.deckStructure.Guide;
 import com.parser.gwentdeckparser.deckStructure.GuideList;
 import com.squareup.moshi.JsonAdapter;
+import com.parser.gwentdeckparser.deckStructure.guide.Guide;
+import com.parser.gwentdeckparser.deckStructure.guide.GuideList;
 import com.squareup.moshi.Moshi;
 import okio.BufferedSource;
 import org.springframework.stereotype.Component;

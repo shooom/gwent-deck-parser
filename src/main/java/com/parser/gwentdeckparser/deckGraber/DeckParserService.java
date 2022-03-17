@@ -1,7 +1,7 @@
 package com.parser.gwentdeckparser.deckGraber;
 
-import com.parser.gwentdeckparser.deckStructure.Guide;
-import com.parser.gwentdeckparser.deckStructure.GuideList;
+import com.parser.gwentdeckparser.deckStructure.guide.Guide;
+import com.parser.gwentdeckparser.deckStructure.guide.GuideList;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;

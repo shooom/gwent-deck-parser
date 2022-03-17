@@ -1,4 +1,4 @@
-package com.parser.gwentdeckparser.deckStructure;
+package com.parser.gwentdeckparser.deckStructure.guide;
 
 import lombok.Data;
 import lombok.NoArgsConstructor;
