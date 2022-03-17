@@ -62,7 +62,7 @@ public class GwentClient {
      * - query (word from tooltips as Example)
      * @return
      */
-    public String cardSearch(Map<String, String> filters) throws IOException {
+    public BufferedSource cardSearch(Map<String, String> filters) throws IOException {
         var cardUrl = HttpUrl.parse(GWENT_URL + "/en/" + DECK_BUILDER).newBuilder();
 
         if (!filters.isEmpty()) {
@@ -75,13 +75,12 @@ public class GwentClient {
 
         var call = client.newCall(req);
         var resp = call.execute();
-        return resp.body().string();
+        return resp.body().source();
     }
 
-    public String cardById(String cardId) throws IOException {
+    public BufferedSource cardById(String cardId) throws IOException {
         var filter = new HashMap<String, String>();
         filter.put("id", String.valueOf(cardId));
-        String res = cardSearch(filter);
-        return res;
+        return cardSearch(filter);
     }
 }
