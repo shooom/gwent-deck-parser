@@ -1,6 +1,7 @@
 package com.parser.gwentdeckparser.deckStructure.enums;
 
 public enum Type {
+    LEADER(0, "Leader"), // TODO: need to check NUM value
     UNIT(4, "Unit"),
     SPECIAL(2, "Special"),
     ARTIFACT(8, "Artifact"),
