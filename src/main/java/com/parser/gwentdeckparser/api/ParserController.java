@@ -1,6 +1,6 @@
 package com.parser.gwentdeckparser.api;
 
-import com.parser.gwentdeckparser.deckGraber.CardGraberService;
+import com.parser.gwentdeckparser.deckGraber.CardGrabberService;
 import com.parser.gwentdeckparser.deckGraber.DeckGraberService;
 import com.parser.gwentdeckparser.deckStructure.deckBuilder.Card;
 import com.parser.gwentdeckparser.deckStructure.guide.Guide;
@@ -16,7 +16,7 @@ import java.util.Map;
 @RequiredArgsConstructor
 public class ParserController {
     private final DeckGraberService deckGrabber;
-    private final CardGraberService cardGrabber;
+    private final CardGrabberService cardGrabber;
 
     @GetMapping("/top")
     public GuideList getTopDecks(@RequestParam(value = "deckNum", defaultValue = "3") long deckNum) {
