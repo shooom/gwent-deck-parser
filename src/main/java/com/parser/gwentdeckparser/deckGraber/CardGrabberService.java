@@ -3,7 +3,6 @@ package com.parser.gwentdeckparser.deckGraber;
 import com.parser.gwentdeckparser.deckStructure.deckBuilder.Card;
 import com.parser.gwentdeckparser.deckStructure.deckBuilder.CardContainer;
 import com.parser.gwentdeckparser.exceptions.CardNotFoundException;
-import com.parser.gwentdeckparser.exceptions.GwentParserException;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
 
