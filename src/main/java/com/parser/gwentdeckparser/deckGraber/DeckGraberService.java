@@ -13,10 +13,10 @@ public class DeckGraberService {
     private final GwentClient client;
 
     public GuideList getTopDecks(long deckCount) {
-        return client.topDecks(deckCount);
+        return client.loadTopDecks(deckCount);
     }
 
     public Guide getDeckById(long deckId) {
-        return client.deck(deckId, "en");
+        return client.loadDeckById(deckId, "en");
     }
 }

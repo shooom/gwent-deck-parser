@@ -1,5 +1,6 @@
 package com.parser.gwentdeckparser.deckGraber;
 
+import com.parser.gwentdeckparser.deckStructure.enums.Color;
 import com.parser.gwentdeckparser.deckStructure.enums.Faction;
 import com.parser.gwentdeckparser.deckStructure.enums.Type;
 import org.springframework.stereotype.Service;
@@ -17,9 +18,11 @@ public class FiltersService {
                 .collect(toMap(Faction::getName, Faction::getNum));
         var types = Arrays.stream(Type.values())
                         .collect(toMap(Type::getName, Type::getNum));
+        var cardGroup = Arrays.stream(Color.values())
+                        .collect(toMap(Color::getName, Color::getNum));
         filters.put("factions", factions);
         filters.put("type", types);
-
+        filters.put("color", cardGroup);
         return filters;
     }
 }

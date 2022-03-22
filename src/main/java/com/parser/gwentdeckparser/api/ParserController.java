@@ -37,4 +37,9 @@ public class ParserController {
     public Card getCardById(@PathVariable String cardId) {
         return cardGrabber.getCardById(cardId);
     }
+
+    @GetMapping("/leaders")
+    public List<Card> getLeaders(@RequestParam Map<String, String> filters) {
+        return cardGrabber.getLeaders(filters);
+    }
 }

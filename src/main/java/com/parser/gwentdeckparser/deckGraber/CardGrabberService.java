@@ -16,16 +16,22 @@ public class CardGrabberService {
     private final GwentClient client;
 
     public List<Card> getCards(Map<String, String> filters) {
-        return client.cardSearch(filters).stream()
+        return client.searchCards(filters).stream()
+                .map(CardContainer::getSource)
+                .collect(Collectors.toList());
+    }
+
+    public List<Card> getLeaders(Map<String, String> filters) {
+        return client.loadLeaders(filters).stream()
                 .map(CardContainer::getSource)
                 .collect(Collectors.toList());
     }
 
     public Card getCardById(String id) {
-        var result = client.cardById(id);
+        var result = client.loadCardById(id);
         if (result.isEmpty()) {
             throw new CardNotFoundException("Card with id=" + id + " not found");
         }
-        return client.cardById(id).get(0).getSource();
+        return client.loadCardById(id).get(0).getSource();
     }
 }

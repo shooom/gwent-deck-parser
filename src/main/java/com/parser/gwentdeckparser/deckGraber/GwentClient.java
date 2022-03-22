@@ -27,16 +27,7 @@ public class GwentClient {
     private final OkHttpClient client = new OkHttpClient();
     private final GwentDataParser parser;
 
-//    public BufferedSource leaders() {
-//        var range = String.format(RANGE, 0, 0);
-//        var req = new Request.Builder()
-//                .url(GWENT_URL + "/en/"+ DECK_GUIDES + range)
-//                .build();
-//
-//        return sendReq(req);
-//    }
-
-    public GuideList topDecks(long deckCount) {
+    public GuideList loadTopDecks(long deckCount) {
         var range = String.format(RANGE, 0, deckCount);
         var req = new Request.Builder()
                 .url(GWENT_URL + "/en/"+ DECK_GUIDES + range)
@@ -44,17 +35,22 @@ public class GwentClient {
         return sendReq(req, parser.getGuideListAdapter());
     }
 
-    public Guide deck(long deckId, String locale) {
+    public Guide loadDeckById(long deckId, String locale) {
         var req = new Request.Builder()
                 .url(GWENT_URL + "/en/" + DECK_GUIDES + "/" + deckId)
                 .build();
         return sendReq(req, parser.getGuideAdapter());
     }
 
-    public List<CardContainer> cardById(String cardId) {
+    public List<CardContainer> loadLeaders(Map<String, String> filters) {
+        filters.put("type", "1");
+        return searchCards(filters);
+    }
+
+    public List<CardContainer> loadCardById(String cardId) {
         var filter = new HashMap<String, String>();
         filter.put("id", String.valueOf(cardId));
-        return cardSearch(filter);
+        return searchCards(filter);
     }
 
     /**
@@ -69,7 +65,7 @@ public class GwentClient {
      * - query (word from tooltips as Example)
      * @return
      */
-    public List<CardContainer> cardSearch(Map<String, String> filters) {
+    public List<CardContainer> searchCards(Map<String, String> filters) {
         var cardUrl = HttpUrl.parse(GWENT_URL + "/en/" + DECK_BUILDER).newBuilder();
 
         if (!filters.isEmpty()) {
