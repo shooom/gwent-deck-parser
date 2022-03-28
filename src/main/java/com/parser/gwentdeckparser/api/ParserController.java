@@ -1,5 +1,6 @@
 package com.parser.gwentdeckparser.api;
 
+import com.parser.gwentdeckparser.cardStorage.service.CardStorageMdbService;
 import com.parser.gwentdeckparser.deckGraber.CardGrabberService;
 import com.parser.gwentdeckparser.deckGraber.DeckGraberService;
 import com.parser.gwentdeckparser.deckStructure.deckBuilder.Card;
@@ -17,6 +18,7 @@ import java.util.Map;
 public class ParserController {
     private final DeckGraberService deckGrabber;
     private final CardGrabberService cardGrabber;
+    private final CardStorageMdbService storageService;
 
     @GetMapping("/top")
     public GuideList getTopDecks(@RequestParam(value = "deckNum", defaultValue = "3") long deckNum) {
@@ -35,6 +37,9 @@ public class ParserController {
 
     @GetMapping("/cards/{cardId}")
     public Card getCardById(@PathVariable String cardId) {
+        Card card = cardGrabber.getCardById(cardId);
+        storageService.save(card);
+
         return cardGrabber.getCardById(cardId);
     }
 
