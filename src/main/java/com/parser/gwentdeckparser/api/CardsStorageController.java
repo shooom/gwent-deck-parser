@@ -11,7 +11,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 @RestController
 @RequiredArgsConstructor
-@RequestMapping("/cards")
+@RequestMapping("/storage")
 public class CardsStorageController {
 
     private final CardStorageMdbService storageService;
