@@ -18,7 +18,7 @@ public class DecksParserController {
     }
 
     @GetMapping("/{deckId}")
-    public Guide getDeck(@PathVariable(value = "deckId") long deckId) {
+    public Guide getDeckById(@PathVariable(value = "deckId") long deckId) {
         return deckGrabber.getDeckById(deckId);
     }
 }

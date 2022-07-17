@@ -9,7 +9,7 @@ import org.springframework.stereotype.Service;
 @Slf4j
 @Service
 @RequiredArgsConstructor
-public class DeckGraberService {
+public class DeckGrabberService {
     private final GwentClient client;
 
     public GuideList getTopDecks(long deckCount) {

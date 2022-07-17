@@ -27,11 +27,11 @@ public class CardsParserController {
     }
 
     @GetMapping("/{cardId}")
-    public Card getCardById(@PathVariable String cardId) {
-        Card card = cardGrabber.getCardById(cardId);
-        storageService.save(card);
+    public Card getCardById(@PathVariable String cardId, String locale) {
+        Card card = cardGrabber.getCardById(cardId, locale);
+//        storageService.save(card);
 
-        return cardGrabber.getCardById(cardId);
+        return cardGrabber.getCardById(cardId, locale);
     }
 
     @GetMapping("/leaders")
