@@ -11,7 +11,7 @@ import java.util.Map;
 @NoArgsConstructor
 public class Card {
     @Json(name = "id")
-    private long gwId;
+    private String gwId;
     @Json(name = "crafting_cost")
     private int craftingCost;
     @Json(name = "provisions_cost")

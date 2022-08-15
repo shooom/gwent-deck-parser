@@ -5,7 +5,6 @@ import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
-import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.Document;
 
 import java.util.List;
@@ -16,11 +15,7 @@ import java.util.Map;
 @NoArgsConstructor
 @AllArgsConstructor
 @Document("gw_cards")
-public class CardDocument {
-    @Id
-    private String id;
-
-    private long gwId;
+public class CardDocument extends BaseGwentEntity {
     private int craftingCost;
     private int provisionCost;
     private int availability;

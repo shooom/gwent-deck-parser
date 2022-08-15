@@ -1,14 +1,11 @@
 package com.parser.gwentdeckparser.api;
 
 import com.parser.gwentdeckparser.deckGraber.CardGrabberService;
-import com.parser.gwentdeckparser.deckGraber.DeckGraberService;
+import com.parser.gwentdeckparser.deckGraber.DeckGrabberService;
 import com.parser.gwentdeckparser.deckStructure.deckBuilder.Card;
-import com.parser.gwentdeckparser.deckStructure.deckBuilder.CardContainer;
 import com.parser.gwentdeckparser.exceptions.CardNotFoundException;
 import com.squareup.moshi.JsonAdapter;
 import com.squareup.moshi.Moshi;
-import org.hamcrest.Matchers;
-import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.mockito.Mockito;
@@ -17,24 +14,18 @@ import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
-import org.springframework.test.web.servlet.result.MockMvcResultHandlers;
-import org.springframework.test.web.servlet.result.MockMvcResultMatchers;
 
-import java.io.IOException;
-
-import static org.hamcrest.Matchers.containsString;
-import static org.junit.jupiter.api.Assertions.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
-@WebMvcTest(ParserController.class)
+@WebMvcTest(DecksParserController.class)
 class ParserControllerTest {
 
     @Autowired
     private MockMvc mockMvc;
 
     @MockBean
-    private DeckGraberService deckGrabber;
+    private DeckGrabberService deckGrabber;
     @MockBean
     private CardGrabberService cardGrabber;
 
