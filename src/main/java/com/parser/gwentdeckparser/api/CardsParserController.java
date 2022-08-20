@@ -1,6 +1,5 @@
 package com.parser.gwentdeckparser.api;
 
-import com.parser.gwentdeckparser.cardStorage.service.CardStorageMdbService;
 import com.parser.gwentdeckparser.deckGraber.CardGrabberService;
 import com.parser.gwentdeckparser.deckStructure.deckBuilder.Card;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -13,12 +12,10 @@ import java.util.Map;
 @RequestMapping("/cards")
 public class CardsParserController {
     private final CardGrabberService cardGrabber;
-    private final CardStorageMdbService storageService;
 
     @Autowired
-    CardsParserController(CardGrabberService cardGrabber, CardStorageMdbService storageService) {
+    CardsParserController(CardGrabberService cardGrabber) {
         this.cardGrabber = cardGrabber;
-        this.storageService = storageService;
     }
 
     @GetMapping
@@ -29,7 +26,6 @@ public class CardsParserController {
     @GetMapping("/{cardId}")
     public Card getCardById(@PathVariable String cardId, String locale) {
         Card card = cardGrabber.getCardById(cardId, locale);
-//        storageService.save(card);
 
         return cardGrabber.getCardById(cardId, locale);
     }
