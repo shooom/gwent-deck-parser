@@ -1,4 +1,8 @@
-
 gwent:
   deck:
     url: https://www.playgwent.com
+
+spring:
+  data:
+    mongodb:
+      uri: ${K_GWENT_MONGO_DATA_STORAGE}

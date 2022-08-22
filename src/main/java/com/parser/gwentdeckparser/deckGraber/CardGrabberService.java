@@ -4,6 +4,7 @@ import com.parser.gwentdeckparser.deckStructure.deckBuilder.Card;
 import com.parser.gwentdeckparser.deckStructure.deckBuilder.CardContainer;
 import com.parser.gwentdeckparser.exceptions.CardNotFoundException;
 import lombok.AllArgsConstructor;
+import org.springframework.lang.NonNull;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -27,11 +28,11 @@ public class CardGrabberService {
                 .collect(Collectors.toList());
     }
 
-    public Card getCardById(String id) {
-        var result = client.loadCardById(id);
+    public Card getCardById(@NonNull String id, @NonNull String locale) {
+        var result = client.loadCardById(id, locale);
         if (result.isEmpty()) {
             throw new CardNotFoundException("Card with id=" + id + " not found");
         }
-        return client.loadCardById(id).get(0).getSource();
+        return result.get(0).getSource();
     }
 }

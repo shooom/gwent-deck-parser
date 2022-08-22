@@ -1,33 +1,31 @@
-package com.parser.gwentdeckparser.deckStructure.deckBuilder;
+package com.parser.gwentdeckparser.cardStorage.model;
 
-import com.squareup.moshi.Json;
-import lombok.Data;
+import com.parser.gwentdeckparser.deckStructure.deckBuilder.Translation;
+import lombok.AllArgsConstructor;
+import lombok.Getter;
 import lombok.NoArgsConstructor;
+import lombok.Setter;
+import org.springframework.data.mongodb.core.mapping.Document;
 
 import java.util.List;
 import java.util.Map;
 
-@Data
+@Getter
+@Setter
 @NoArgsConstructor
-public class Card {
-    @Json(name = "id")
-    private String gwId;
-    @Json(name = "crafting_cost")
+@AllArgsConstructor
+@Document("gw_cards")
+public class CardDocument extends BaseGwentEntity {
     private int craftingCost;
-    @Json(name = "provisions_cost")
     private int provisionCost;
     private int availability;
     private List<String> keywords;
-    @Json(name = "category_names")
     private int[] categoryNames;
     private int type;
-    @Json(name = "primary_category_id")
     private Integer primaryCategoryId;
-    @Json(name = "secondary_factions")
     private int[] secondaryFactions;
     private int armour;
     private Map<String, Translation> translations;
-    @Json(name = "card_group")
     private int cardGroup;
     private int faction;
     private String name;
