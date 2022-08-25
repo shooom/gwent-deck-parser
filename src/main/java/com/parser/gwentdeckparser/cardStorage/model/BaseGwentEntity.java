@@ -7,6 +7,9 @@ public class BaseGwentEntity {
     @Id
     private String id;
 
+    /**
+     * Unique value (number, word) from Gwent site
+     */
     @Field("gwent_id")
     private String gwentObjectId;
 

@@ -1,8 +1,11 @@
 package com.parser.gwentdeckparser.cardsLoader.service;
 
 import com.parser.gwentdeckparser.cardStorage.model.CardDocument;
+import com.parser.gwentdeckparser.cardStorage.model.CategoryDocument;
+import com.parser.gwentdeckparser.cardStorage.model.EmbeddedTranslation;
 import com.parser.gwentdeckparser.cardStorage.service.CardDocConverter;
 import com.parser.gwentdeckparser.cardStorage.service.CardMongoStorageService;
+import com.parser.gwentdeckparser.cardStorage.service.CategoryMongoStorageService;
 import com.parser.gwentdeckparser.cardsLoader.dto.LoaderResultDto;
 import com.parser.gwentdeckparser.common.LocalisationEnum;
 import com.parser.gwentdeckparser.deckGraber.CardGrabberService;
@@ -18,12 +21,14 @@ import java.util.Optional;
 public class CardsLoaderService {
 
     private final CardMongoStorageService storageService;
+    private final CategoryMongoStorageService categoryService;
     private final CardGrabberService grabberService;
 
     @Autowired
-    public CardsLoaderService(CardMongoStorageService storageService, CardGrabberService grabberService) {
+    public CardsLoaderService(CardMongoStorageService storageService, CategoryMongoStorageService categoryService, CardGrabberService grabberService) {
         this.grabberService = grabberService;
         this.storageService = storageService;
+        this.categoryService = categoryService;
     }
 
     public LoaderResultDto loadCardsToStorage(Map<String, String> filters) {
@@ -31,7 +36,10 @@ public class CardsLoaderService {
         LocalisationEnum locale = LocalisationEnum.valueOf(filters.get("locale").toUpperCase());
         List<Card> cards = grabberService.getCards(filters);
 
-        cards.forEach(card -> saveOrUpdateCard(card, locale));
+        cards.forEach(card -> {
+            saveOrUpdateCategories(card, locale);
+            saveOrUpdateCard(card, locale);
+        });
         return new LoaderResultDto();
     }
 
@@ -50,8 +58,23 @@ public class CardsLoaderService {
         storageService.save(savedCard);
     }
 
+    private void saveOrUpdateCategories(Card card, LocalisationEnum locale) {
+        for(int i = 0; i < card.getCategoryNames().size(); i++) {
+            String gwentId = card.getCategoryNames().get(i);
+            String translation = card.getTranslations().get(locale.getLocalisation()).getCategories()[i];
+
+            CategoryDocument category = resolveCategory(gwentId);
+            category.setTranslations(locale, new EmbeddedTranslation(translation));
+            categoryService.saveCategory(category);
+        }
+    }
+
+    private CategoryDocument resolveCategory(String gwentId) {
+        return categoryService.findByGwentId(gwentId).orElse(new CategoryDocument(gwentId));
+    }
+
     /**
-     * Update most updateble parts of cards (power, armour, translations)
+     * Update most updatable parts of cards (power, armour, translations)
      * @param storedDocument
      * @param newCard
      * @param locale

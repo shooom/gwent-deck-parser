@@ -2,15 +2,14 @@ package com.parser.gwentdeckparser.cardStorage.model;
 
 public class EmbeddedTranslation {
 
-    private String locale;
     private String localizedName;
 
-    public String getLocale() {
-        return locale;
+    public EmbeddedTranslation(String localizedName) {
+        this.localizedName = localizedName;
     }
 
-    public void setLocale(String locale) {
-        this.locale = locale;
+    public void setLocale(String localizedName) {
+        this.localizedName = localizedName;
     }
 
     public String getLocalizedName() {
