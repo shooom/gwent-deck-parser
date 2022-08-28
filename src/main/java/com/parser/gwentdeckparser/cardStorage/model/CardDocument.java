@@ -20,7 +20,7 @@ public class CardDocument extends BaseGwentEntity {
     private int provisionCost;
     private int availability;
     private List<String> keywords;
-    private int[] categoryNames;
+    private List<String> categoryNames;
     private int type;
     private Integer primaryCategoryId;
     private int[] secondaryFactions;

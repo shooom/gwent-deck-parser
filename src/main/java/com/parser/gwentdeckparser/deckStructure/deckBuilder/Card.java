@@ -19,7 +19,7 @@ public class Card {
     private int availability;
     private List<String> keywords;
     @Json(name = "category_names")
-    private int[] categoryNames;
+    private List<String> categoryNames;
     private int type;
     @Json(name = "primary_category_id")
     private Integer primaryCategoryId;
