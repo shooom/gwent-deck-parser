@@ -1,4 +1,4 @@
-package com.parser.gwentdeckparser.api;
+package com.parser.gwentdeckparser.cardStorage.controller;
 
 import com.parser.gwentdeckparser.cardStorage.model.CardDocument;
 import com.parser.gwentdeckparser.cardStorage.service.CardMongoStorageService;
