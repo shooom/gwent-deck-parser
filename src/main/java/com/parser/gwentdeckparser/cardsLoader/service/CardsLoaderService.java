@@ -2,7 +2,7 @@ package com.parser.gwentdeckparser.cardsLoader.service;
 
 import com.parser.gwentdeckparser.cardStorage.model.CardDocument;
 import com.parser.gwentdeckparser.cardStorage.model.CategoryDocument;
-import com.parser.gwentdeckparser.cardStorage.model.EmbeddedTranslation;
+import com.parser.gwentdeckparser.cardStorage.model.embedded.EmbeddedTranslation;
 import com.parser.gwentdeckparser.cardStorage.service.CardDocConverter;
 import com.parser.gwentdeckparser.cardStorage.service.CardMongoStorageService;
 import com.parser.gwentdeckparser.cardStorage.service.CategoryMongoStorageService;
@@ -22,12 +22,14 @@ public class CardsLoaderService {
 
     private final CardMongoStorageService storageService;
     private final CategoryMongoStorageService categoryService;
+    private final KeyWordLoaderService keyWordLoader;
     private final CardGrabberService grabberService;
 
     @Autowired
-    public CardsLoaderService(CardMongoStorageService storageService, CategoryMongoStorageService categoryService, CardGrabberService grabberService) {
+    public CardsLoaderService(CardMongoStorageService storageService, CategoryMongoStorageService categoryService, KeyWordLoaderService keyWordLoader, CardGrabberService grabberService) {
         this.grabberService = grabberService;
         this.storageService = storageService;
+        this.keyWordLoader = keyWordLoader;
         this.categoryService = categoryService;
     }
 
@@ -38,28 +40,30 @@ public class CardsLoaderService {
 
         cards.forEach(card -> {
             saveOrUpdateCategories(card, locale);
+            keyWordLoader.saveOrUpdateKeyword(card, locale);
             saveOrUpdateCard(card, locale);
         });
         return new LoaderResultDto();
     }
 
     private void saveOrUpdateCard(Card card, LocalisationEnum locale) {
+        System.out.println("LOADER: HANDLING CARD " + card.getGwId() + "... ");
         Optional<CardDocument> cardDoc = storageService.findByGwentId(card.getGwId());
         CardDocument newCard = converter.convert(card);
 
         if (cardDoc.isEmpty()) {
-            System.out.println("LOADER: ADD NEW CARD " + newCard.getGwentObjectId());
+            System.out.println("LOADER: ADDED NEW CARD " + newCard.getGwentObjectId());
             storageService.save(newCard);
             return;
         }
-        System.out.println("LOADER: UPDATE CARD WITH GWENT-ID " + newCard.getGwentObjectId());
+        System.out.println("LOADER: UPDATED CARD " + newCard.getGwentObjectId());
         CardDocument savedCard = cardDoc.get();
         updateCardData(savedCard, newCard, locale);
         storageService.save(savedCard);
     }
 
     private void saveOrUpdateCategories(Card card, LocalisationEnum locale) {
-        for(int i = 0; i < card.getCategoryNames().size(); i++) {
+        for (int i = 0; i < card.getCategoryNames().size(); i++) {
             String gwentId = card.getCategoryNames().get(i);
             String translation = card.getTranslations().get(locale.getLocalisation()).getCategories()[i];
 
@@ -75,11 +79,13 @@ public class CardsLoaderService {
 
     /**
      * Update most updatable parts of cards (power, armour, translations)
+     *
      * @param storedDocument
      * @param newCard
      * @param locale
      */
     private void updateCardData(CardDocument storedDocument, CardDocument newCard, LocalisationEnum locale) {
+        //TODO: sometimes cards can change own type - need to add this update
         //TODO: check hashcode before update?
         storedDocument.setPower(newCard.getPower());
         storedDocument.setArmour(newCard.getArmour());
