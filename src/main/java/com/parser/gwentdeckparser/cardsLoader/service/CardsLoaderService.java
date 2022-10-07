@@ -1,11 +1,8 @@
 package com.parser.gwentdeckparser.cardsLoader.service;
 
 import com.parser.gwentdeckparser.cardStorage.model.CardDocument;
-import com.parser.gwentdeckparser.cardStorage.model.CategoryDocument;
-import com.parser.gwentdeckparser.cardStorage.model.embedded.EmbeddedTranslation;
 import com.parser.gwentdeckparser.cardStorage.service.CardDocConverter;
 import com.parser.gwentdeckparser.cardStorage.service.CardMongoStorageService;
-import com.parser.gwentdeckparser.cardStorage.service.CategoryMongoStorageService;
 import com.parser.gwentdeckparser.cardsLoader.dto.LoaderResultDto;
 import com.parser.gwentdeckparser.common.LocalisationEnum;
 import com.parser.gwentdeckparser.deckGraber.CardGrabberService;
@@ -21,16 +18,16 @@ import java.util.Optional;
 public class CardsLoaderService {
 
     private final CardMongoStorageService storageService;
-    private final CategoryMongoStorageService categoryService;
     private final KeyWordLoaderService keyWordLoader;
+    private final CategoryLoaderService categoryLoader;
     private final CardGrabberService grabberService;
 
     @Autowired
-    public CardsLoaderService(CardMongoStorageService storageService, CategoryMongoStorageService categoryService, KeyWordLoaderService keyWordLoader, CardGrabberService grabberService) {
+    public CardsLoaderService(CardMongoStorageService storageService, KeyWordLoaderService keyWordLoader, CategoryLoaderService categoryLoader, CardGrabberService grabberService) {
         this.grabberService = grabberService;
         this.storageService = storageService;
         this.keyWordLoader = keyWordLoader;
-        this.categoryService = categoryService;
+        this.categoryLoader = categoryLoader;
     }
 
     public LoaderResultDto loadCardsToStorage(Map<String, String> filters) {
@@ -39,7 +36,7 @@ public class CardsLoaderService {
         List<Card> cards = grabberService.getCards(filters);
 
         cards.forEach(card -> {
-            saveOrUpdateCategories(card, locale);
+            categoryLoader.saveOrUpdateCategories(card, locale);
             keyWordLoader.saveOrUpdateKeyword(card, locale);
             saveOrUpdateCard(card, locale);
         });
@@ -60,21 +57,6 @@ public class CardsLoaderService {
         CardDocument savedCard = cardDoc.get();
         updateCardData(savedCard, newCard, locale);
         storageService.save(savedCard);
-    }
-
-    private void saveOrUpdateCategories(Card card, LocalisationEnum locale) {
-        for (int i = 0; i < card.getCategoryNames().size(); i++) {
-            String gwentId = card.getCategoryNames().get(i);
-            String translation = card.getTranslations().get(locale.getLocalisation()).getCategories()[i];
-
-            CategoryDocument category = resolveCategory(gwentId);
-            category.setTranslations(locale, new EmbeddedTranslation(translation));
-            categoryService.saveCategory(category);
-        }
-    }
-
-    private CategoryDocument resolveCategory(String gwentId) {
-        return categoryService.findByGwentId(gwentId).orElse(new CategoryDocument(gwentId));
     }
 
     /**
