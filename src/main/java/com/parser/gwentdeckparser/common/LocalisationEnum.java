@@ -4,7 +4,6 @@ public enum LocalisationEnum {
 
     EN("en"),
     RU("ru"),
-    PL("pl"),
     DE("de");
 
     private String localisation;
