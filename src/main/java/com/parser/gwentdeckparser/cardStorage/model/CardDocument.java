@@ -5,6 +5,7 @@ import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+import org.springframework.data.mongodb.core.mapping.DBRef;
 import org.springframework.data.mongodb.core.mapping.Document;
 
 import java.util.List;
@@ -19,8 +20,10 @@ public class CardDocument extends BaseGwentEntity {
     private int craftingCost;
     private int provisionCost;
     private int availability;
-    private List<String> keywords;
-    private List<String> categoryNames;
+    @DBRef(lazy = true)
+    private List<KeyWordDocument> keywords;
+    @DBRef(lazy = true)
+    private List<CategoryDocument> categoryNames;
     private int type;
     private Integer primaryCategoryId;
     private int[] secondaryFactions;

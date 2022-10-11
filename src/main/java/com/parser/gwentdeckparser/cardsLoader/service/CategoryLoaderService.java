@@ -8,6 +8,9 @@ import com.parser.gwentdeckparser.deckStructure.deckBuilder.Card;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
+import java.util.List;
+
 @Service
 public class CategoryLoaderService {
 
@@ -18,15 +21,17 @@ public class CategoryLoaderService {
         this.categoryService = categoryService;
     }
 
-    public void saveOrUpdateCategories(Card card, LocalisationEnum locale) {
+    public List<CategoryDocument> saveOrUpdateCategories(Card card, LocalisationEnum locale) {
+        List<CategoryDocument> categoryDocs = new ArrayList<>();
         for (int i = 0; i < card.getCategoryNames().size(); i++) {
             String gwentId = card.getCategoryNames().get(i);
             String translation = card.getTranslations().get(locale.getLocalisation()).getCategories()[i];
 
             CategoryDocument category = resolveCategory(gwentId);
             category.setTranslations(locale, new EmbeddedTranslation(translation));
-            categoryService.saveCategory(category);
+            categoryDocs.add(categoryService.saveCategory(category));
         }
+        return categoryDocs;
     }
 
     private CategoryDocument resolveCategory(String gwentId) {

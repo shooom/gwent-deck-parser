@@ -36,27 +36,28 @@ public class CardsLoaderService {
         List<Card> cards = grabberService.getCards(filters);
 
         cards.forEach(card -> {
-            categoryLoader.saveOrUpdateCategories(card, locale);
-            keyWordLoader.saveOrUpdateKeyword(card, locale);
-            saveOrUpdateCard(card, locale);
+            CardDocument cardDoc = saveOrUpdateCard(card, locale);
+            cardDoc.setCategoryNames(categoryLoader.saveOrUpdateCategories(card, locale));
+            cardDoc.setKeywords(keyWordLoader.saveOrUpdateKeyword(card, locale));
+            storageService.save(cardDoc);
         });
         return new LoaderResultDto();
     }
 
-    private void saveOrUpdateCard(Card card, LocalisationEnum locale) {
+    private CardDocument saveOrUpdateCard(Card card, LocalisationEnum locale) {
         System.out.println("LOADER: HANDLING CARD " + card.getGwId() + "... ");
         Optional<CardDocument> cardDoc = storageService.findByGwentId(card.getGwId());
         CardDocument newCard = converter.convert(card);
 
         if (cardDoc.isEmpty()) {
             System.out.println("LOADER: ADDED NEW CARD " + newCard.getGwentObjectId());
-            storageService.save(newCard);
-            return;
+            return newCard;
         }
+
         System.out.println("LOADER: UPDATED CARD " + newCard.getGwentObjectId());
         CardDocument savedCard = cardDoc.get();
         updateCardData(savedCard, newCard, locale);
-        storageService.save(savedCard);
+        return savedCard;
     }
 
     /**
@@ -85,9 +86,7 @@ public class CardsLoaderService {
         doc.setCraftingCost(card.getCraftingCost());
         doc.setProvisionCost(card.getProvisionCost());
         doc.setAvailability(card.getAvailability());
-        doc.setKeywords(card.getKeywords());
         doc.setType(card.getType());
-        doc.setCategoryNames(card.getCategoryNames());
         doc.setPrimaryCategoryId(card.getPrimaryCategoryId());
         doc.setSecondaryFactions(card.getSecondaryFactions());
         doc.setArmour(card.getArmour());
