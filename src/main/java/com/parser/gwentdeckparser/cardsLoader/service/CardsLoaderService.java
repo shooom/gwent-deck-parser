@@ -1,11 +1,8 @@
 package com.parser.gwentdeckparser.cardsLoader.service;
 
 import com.parser.gwentdeckparser.cardStorage.model.CardDocument;
-import com.parser.gwentdeckparser.cardStorage.model.CategoryDocument;
-import com.parser.gwentdeckparser.cardStorage.model.embedded.EmbeddedTranslation;
 import com.parser.gwentdeckparser.cardStorage.service.CardDocConverter;
 import com.parser.gwentdeckparser.cardStorage.service.CardMongoStorageService;
-import com.parser.gwentdeckparser.cardStorage.service.CategoryMongoStorageService;
 import com.parser.gwentdeckparser.cardsLoader.dto.LoaderResultDto;
 import com.parser.gwentdeckparser.common.LocalisationEnum;
 import com.parser.gwentdeckparser.deckGraber.CardGrabberService;
@@ -21,16 +18,16 @@ import java.util.Optional;
 public class CardsLoaderService {
 
     private final CardMongoStorageService storageService;
-    private final CategoryMongoStorageService categoryService;
     private final KeyWordLoaderService keyWordLoader;
+    private final CategoryLoaderService categoryLoader;
     private final CardGrabberService grabberService;
 
     @Autowired
-    public CardsLoaderService(CardMongoStorageService storageService, CategoryMongoStorageService categoryService, KeyWordLoaderService keyWordLoader, CardGrabberService grabberService) {
+    public CardsLoaderService(CardMongoStorageService storageService, KeyWordLoaderService keyWordLoader, CategoryLoaderService categoryLoader, CardGrabberService grabberService) {
         this.grabberService = grabberService;
         this.storageService = storageService;
         this.keyWordLoader = keyWordLoader;
-        this.categoryService = categoryService;
+        this.categoryLoader = categoryLoader;
     }
 
     public LoaderResultDto loadCardsToStorage(Map<String, String> filters) {
@@ -39,42 +36,28 @@ public class CardsLoaderService {
         List<Card> cards = grabberService.getCards(filters);
 
         cards.forEach(card -> {
-            saveOrUpdateCategories(card, locale);
-            keyWordLoader.saveOrUpdateKeyword(card, locale);
-            saveOrUpdateCard(card, locale);
+            CardDocument cardDoc = saveOrUpdateCard(card, locale);
+            cardDoc.setCategoryNames(categoryLoader.saveOrUpdateCategories(card, locale));
+            cardDoc.setKeywords(keyWordLoader.saveOrUpdateKeyword(card, locale));
+            storageService.save(cardDoc);
         });
         return new LoaderResultDto();
     }
 
-    private void saveOrUpdateCard(Card card, LocalisationEnum locale) {
+    private CardDocument saveOrUpdateCard(Card card, LocalisationEnum locale) {
         System.out.println("LOADER: HANDLING CARD " + card.getGwId() + "... ");
         Optional<CardDocument> cardDoc = storageService.findByGwentId(card.getGwId());
         CardDocument newCard = converter.convert(card);
 
         if (cardDoc.isEmpty()) {
             System.out.println("LOADER: ADDED NEW CARD " + newCard.getGwentObjectId());
-            storageService.save(newCard);
-            return;
+            return newCard;
         }
+
         System.out.println("LOADER: UPDATED CARD " + newCard.getGwentObjectId());
         CardDocument savedCard = cardDoc.get();
         updateCardData(savedCard, newCard, locale);
-        storageService.save(savedCard);
-    }
-
-    private void saveOrUpdateCategories(Card card, LocalisationEnum locale) {
-        for (int i = 0; i < card.getCategoryNames().size(); i++) {
-            String gwentId = card.getCategoryNames().get(i);
-            String translation = card.getTranslations().get(locale.getLocalisation()).getCategories()[i];
-
-            CategoryDocument category = resolveCategory(gwentId);
-            category.setTranslations(locale, new EmbeddedTranslation(translation));
-            categoryService.saveCategory(category);
-        }
-    }
-
-    private CategoryDocument resolveCategory(String gwentId) {
-        return categoryService.findByGwentId(gwentId).orElse(new CategoryDocument(gwentId));
+        return savedCard;
     }
 
     /**
@@ -103,9 +86,7 @@ public class CardsLoaderService {
         doc.setCraftingCost(card.getCraftingCost());
         doc.setProvisionCost(card.getProvisionCost());
         doc.setAvailability(card.getAvailability());
-        doc.setKeywords(card.getKeywords());
         doc.setType(card.getType());
-        doc.setCategoryNames(card.getCategoryNames());
         doc.setPrimaryCategoryId(card.getPrimaryCategoryId());
         doc.setSecondaryFactions(card.getSecondaryFactions());
         doc.setArmour(card.getArmour());

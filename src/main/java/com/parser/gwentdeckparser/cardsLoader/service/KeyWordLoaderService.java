@@ -8,6 +8,7 @@ import com.parser.gwentdeckparser.deckStructure.deckBuilder.Card;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
@@ -23,7 +24,8 @@ public class KeyWordLoaderService {
         this.keywordService = keywordService;
     }
 
-    public void saveOrUpdateKeyword(Card card, LocalisationEnum locale) {
+    public List<KeyWordDocument> saveOrUpdateKeyword(Card card, LocalisationEnum locale) {
+        List<KeyWordDocument> keywordDocs = new ArrayList<>();
         List<String> keywords = card.getKeywords();
         List<String> kwTranslations = findAllMatches(card.getTranslations().get(locale.getLocalisation()).getTooltip());
         Map<String, String> translations = parseTooltip(kwTranslations);
@@ -31,8 +33,9 @@ public class KeyWordLoaderService {
         for (String key : keywords) {
             KeyWordDocument doc = resolveKeyword(key);
             doc.getTranslations().put(locale, addTranslation(translations.get(key)));
-            keywordService.save(doc);
+            keywordDocs.add(keywordService.save(doc));
         }
+        return keywordDocs;
     }
 
     private KeyWordTranslation addTranslation(String keyword) {
