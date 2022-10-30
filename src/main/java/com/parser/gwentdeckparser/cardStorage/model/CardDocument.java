@@ -1,19 +1,19 @@
 package com.parser.gwentdeckparser.cardStorage.model;
 
-import com.parser.gwentdeckparser.deckStructure.deckBuilder.Translation;
+import com.parser.gwentdeckparser.cardStorage.model.embedded.CardTranslation;
+import com.parser.gwentdeckparser.common.LocalisationEnum;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
-import lombok.NoArgsConstructor;
 import lombok.Setter;
 import org.springframework.data.mongodb.core.mapping.DBRef;
 import org.springframework.data.mongodb.core.mapping.Document;
 
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
 @Getter
 @Setter
-@NoArgsConstructor
 @AllArgsConstructor
 @Document("gw_cards")
 public class CardDocument extends BaseGwentEntity {
@@ -28,10 +28,14 @@ public class CardDocument extends BaseGwentEntity {
     private Integer primaryCategoryId;
     private int[] secondaryFactions;
     private int armour;
-    private Map<String, Translation> translations;
+    private Map<LocalisationEnum, CardTranslation> translations;
     private int cardGroup;
     private int faction;
     private String name;
     private int power;
     private int rarity;
+
+    public CardDocument() {
+        this.translations = new HashMap<>();
+    }
 }

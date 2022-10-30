@@ -1,12 +1,14 @@
 package com.parser.gwentdeckparser.cardsLoader.service;
 
 import com.parser.gwentdeckparser.cardStorage.model.CardDocument;
+import com.parser.gwentdeckparser.cardStorage.model.embedded.CardTranslation;
 import com.parser.gwentdeckparser.cardStorage.service.CardDocConverter;
 import com.parser.gwentdeckparser.cardStorage.service.CardMongoStorageService;
 import com.parser.gwentdeckparser.cardsLoader.dto.LoaderResultDto;
 import com.parser.gwentdeckparser.common.LocalisationEnum;
 import com.parser.gwentdeckparser.deckGraber.CardGrabberService;
 import com.parser.gwentdeckparser.deckStructure.deckBuilder.Card;
+import com.parser.gwentdeckparser.deckStructure.deckBuilder.Translation;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -31,32 +33,45 @@ public class CardsLoaderService {
     }
 
     public LoaderResultDto loadCardsToStorage(Map<String, String> filters) {
-        //TODO: to think about correct locale searching
-        LocalisationEnum locale = LocalisationEnum.valueOf(filters.get("locale").toUpperCase());
+        LocalisationEnum locale = getLocale(filters);
         List<Card> cards = grabberService.getCards(filters);
 
         cards.forEach(card -> {
             CardDocument cardDoc = saveOrUpdateCard(card, locale);
             cardDoc.setCategoryNames(categoryLoader.saveOrUpdateCategories(card, locale));
             cardDoc.setKeywords(keyWordLoader.saveOrUpdateKeyword(card, locale));
+            cardDoc.setTranslations(updateTranslations(cardDoc, card, locale));
             storageService.save(cardDoc);
         });
         return new LoaderResultDto();
     }
 
+    private Map<LocalisationEnum, CardTranslation> updateTranslations(CardDocument cardDoc, Card card, LocalisationEnum locale) {
+        Map<LocalisationEnum, CardTranslation>  docTranslations = cardDoc.getTranslations();
+        Translation newTranslation = card.getTranslations().get(locale.getLocalisation());
+        CardTranslation newCardTranslation = new CardTranslation(newTranslation.getName(), newTranslation.getTooltip(), newTranslation.getFluff());
+        docTranslations.put(locale, newCardTranslation);
+
+        return docTranslations;
+    }
+
+    private LocalisationEnum getLocale(Map<String, String> filters) {
+        return LocalisationEnum.valueOf(filters.get("locale").toUpperCase());
+    }
+
     private CardDocument saveOrUpdateCard(Card card, LocalisationEnum locale) {
         System.out.println("LOADER: HANDLING CARD " + card.getGwId() + "... ");
-        Optional<CardDocument> cardDoc = storageService.findByGwentId(card.getGwId());
-        CardDocument newCard = converter.convert(card);
+        Optional<CardDocument> optionalDoc = storageService.findByGwentId(card.getGwId());
 
-        if (cardDoc.isEmpty()) {
+        if (optionalDoc.isEmpty()) {
+            CardDocument newCard = converter.convert(card, locale);
             System.out.println("LOADER: ADDED NEW CARD " + newCard.getGwentObjectId());
             return newCard;
         }
 
-        System.out.println("LOADER: UPDATED CARD " + newCard.getGwentObjectId());
-        CardDocument savedCard = cardDoc.get();
-        updateCardData(savedCard, newCard, locale);
+        CardDocument savedCard = optionalDoc.get();
+        updateCardData(savedCard, card, locale);
+        System.out.println("LOADER: UPDATED CARD " + savedCard.getGwentObjectId());
         return savedCard;
     }
 
@@ -67,20 +82,13 @@ public class CardsLoaderService {
      * @param newCard
      * @param locale
      */
-    private void updateCardData(CardDocument storedDocument, CardDocument newCard, LocalisationEnum locale) {
-        //TODO: sometimes cards can change own type - need to add this update
-        //TODO: check hashcode before update?
+    private void updateCardData(CardDocument storedDocument, Card newCard, LocalisationEnum locale) {
         storedDocument.setPower(newCard.getPower());
         storedDocument.setArmour(newCard.getArmour());
         storedDocument.setProvisionCost(newCard.getProvisionCost());
-        storedDocument.setKeywords(newCard.getKeywords());
-
-        if (storedDocument.getTranslations().get(locale.getLocalisation()) == null) {
-            storedDocument.getTranslations().put(locale.getLocalisation(), newCard.getTranslations().get(locale.getLocalisation()));
-        }
     }
 
-    private CardDocConverter converter = (Card card) -> {
+    private CardDocConverter converter = (Card card, LocalisationEnum locale) -> {
         CardDocument doc = new CardDocument();
         doc.setGwentObjectId(card.getGwId());
         doc.setCraftingCost(card.getCraftingCost());
@@ -90,7 +98,6 @@ public class CardsLoaderService {
         doc.setPrimaryCategoryId(card.getPrimaryCategoryId());
         doc.setSecondaryFactions(card.getSecondaryFactions());
         doc.setArmour(card.getArmour());
-        doc.setTranslations(card.getTranslations());
         doc.setCardGroup(card.getCardGroup());
         doc.setFaction(card.getFaction());
         doc.setName(card.getName());
