@@ -26,6 +26,8 @@ public class Card {
     @Json(name = "primary_category_id")
     private Integer primaryCategoryId;
     private int type;
+
+    // deck builder fields part
     private int availability;
     private List<String> keywords;
     @Json(name = "category_names")
@@ -33,4 +35,10 @@ public class Card {
     @Json(name = "secondary_factions")
     private int[] secondaryFactions;
     private Map<String, Translation> translations;
+
+    // images part
+    @Json(name = "preview_img_path")
+    private CardImagesBlock previewImages;
+    @Json(name = "slot_img_path")
+    private CardImagesBlock slotImages;
 }
