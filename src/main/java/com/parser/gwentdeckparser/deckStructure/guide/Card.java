@@ -10,17 +10,17 @@ import java.util.List;
 public class Card {
     private long id;
     private String name;
-    private String fluff;
+    private int power;
+    private int armour;
     private String rarity;
     private Faction faction;
     private String cardGroup;
-    private String categoryName;
-    private String type;
     private int craftingCost;
-    private int power;
     private int provisionsCost;
-    private int armour;
     private Integer primaryCategoryId;
+    private String type;
+    private String categoryName;
+    private String fluff;
     private List<Integer> categoryIds;
     private List<List<CardTooltip>> tooltip;
 }
