@@ -12,25 +12,33 @@ import java.util.Map;
 public class Card {
     @Json(name = "id")
     private String gwId;
+    private String name;
+    private int power;
+    private int armour;
+    private int rarity;
+    private int faction;
+    @Json(name = "card_group")
+    private int cardGroup;
     @Json(name = "crafting_cost")
     private int craftingCost;
     @Json(name = "provisions_cost")
     private int provisionCost;
+    @Json(name = "primary_category_id")
+    private Integer primaryCategoryId;
+    private int type;
+
+    // deck builder fields part
     private int availability;
     private List<String> keywords;
     @Json(name = "category_names")
     private List<String> categoryNames;
-    private int type;
-    @Json(name = "primary_category_id")
-    private Integer primaryCategoryId;
     @Json(name = "secondary_factions")
     private int[] secondaryFactions;
-    private int armour;
     private Map<String, Translation> translations;
-    @Json(name = "card_group")
-    private int cardGroup;
-    private int faction;
-    private String name;
-    private int power;
-    private int rarity;
+
+    // images part
+    @Json(name = "preview_img_path")
+    private CardImagesBlock previewImages;
+    @Json(name = "slot_img_path")
+    private CardImagesBlock slotImages;
 }
