@@ -1,8 +1,8 @@
 package com.parser.gwentdeckparser.deckGraber;
 
-import com.parser.gwentdeckparser.deckStructure.enums.Color;
-import com.parser.gwentdeckparser.deckStructure.enums.Faction;
-import com.parser.gwentdeckparser.deckStructure.enums.Type;
+import com.parser.gwentdeckparser.common.enums.Color;
+import com.parser.gwentdeckparser.common.enums.Faction;
+import com.parser.gwentdeckparser.common.enums.Type;
 import org.springframework.stereotype.Service;
 
 import java.util.*;

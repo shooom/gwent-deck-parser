@@ -1,4 +1,4 @@
-package com.parser.gwentdeckparser.deckStructure.enums;
+package com.parser.gwentdeckparser.common.enums;
 
 public enum Faction {
     NEUTRAL(0, "Neutral"),

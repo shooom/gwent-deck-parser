@@ -1,7 +1,7 @@
 package com.parser.gwentdeckparser.cardStorage.model;
 
 import com.parser.gwentdeckparser.cardStorage.model.embedded.EmbeddedTranslation;
-import com.parser.gwentdeckparser.common.LocalisationEnum;
+import com.parser.gwentdeckparser.common.enums.LocalisationEnum;
 import org.springframework.data.mongodb.core.mapping.Document;
 
 import java.util.HashMap;

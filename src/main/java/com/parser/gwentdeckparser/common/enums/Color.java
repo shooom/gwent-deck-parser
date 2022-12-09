@@ -1,4 +1,4 @@
-package com.parser.gwentdeckparser.deckStructure.enums;
+package com.parser.gwentdeckparser.common.enums;
 
 import lombok.Getter;
 

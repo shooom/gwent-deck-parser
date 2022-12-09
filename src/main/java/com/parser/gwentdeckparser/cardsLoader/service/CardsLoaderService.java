@@ -5,7 +5,7 @@ import com.parser.gwentdeckparser.cardStorage.model.embedded.CardTranslation;
 import com.parser.gwentdeckparser.cardStorage.service.CardDocConverter;
 import com.parser.gwentdeckparser.cardStorage.service.CardMongoStorageService;
 import com.parser.gwentdeckparser.cardsLoader.dto.LoaderResultDto;
-import com.parser.gwentdeckparser.common.LocalisationEnum;
+import com.parser.gwentdeckparser.common.enums.LocalisationEnum;
 import com.parser.gwentdeckparser.deckGraber.CardGrabberService;
 import com.parser.gwentdeckparser.deckStructure.deckBuilder.Card;
 import com.parser.gwentdeckparser.deckStructure.deckBuilder.Translation;
