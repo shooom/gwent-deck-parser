@@ -1,27 +1,32 @@
 package com.parser.gwentdeckparser.common.enums;
 
-public enum Faction {
-    NEUTRAL(0, "Neutral"),
-    MONSTERS(1, "Monsters"),
-    NILFGAARD(2, "Nilfgaard"),
-    NORTHERN_REALMS(3, "Northern reams"),
-    SCOIATAEL(4, "Scoia'tael"),
-    SKELLIGE(5, "Skellige"),
-    SYNDICATE(6, "Syndicate");
+import com.parser.gwentdeckparser.common.GwentNameble;
+import com.parser.gwentdeckparser.common.GwentNumerable;
 
-    private int num;
-    private String name;
+public enum Faction implements GwentNumerable, GwentNameble {
+    NEUTRAL(0, "neutral"),
+    MONSTERS(1, "monsters"),
+    NILFGAARD(2, "nilfgaard"),
+    NORTHERN_REALMS(3, "northern reams"),
+    SCOIATAEL(4, "scoiatael"),
+    SKELLIGE(5, "skellige"),
+    SYNDICATE(6, "syndicate");
+
+    private int gwentNumber;
+    private String gwentName;
 
     Faction(int num, String name) {
-        this.name = name;
-        this.num = num;
+        this.gwentName = name;
+        this.gwentNumber = num;
     }
 
-    public int getNum() {
-        return num;
+    @Override
+    public int getGwentNumber() {
+        return gwentNumber;
     }
 
-    public String getName() {
-        return name;
+    @Override
+    public String getGwentName() {
+        return gwentName;
     }
 }

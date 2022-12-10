@@ -1,25 +1,30 @@
 package com.parser.gwentdeckparser.common.enums;
 
-public enum Type {
-    LEADER(1, "Leader"),
-    UNIT(4, "Unit"),
-    SPECIAL(2, "Special"),
-    ARTIFACT(8, "Artifact"),
-    TACTIC(16, "Tactic");
+import com.parser.gwentdeckparser.common.GwentNameble;
+import com.parser.gwentdeckparser.common.GwentNumerable;
 
-    private int num;
-    private String name;
+public enum Type implements GwentNumerable, GwentNameble {
+    LEADER(1, "leader"),
+    SPECIAL(2, "special"),
+    UNIT(4, "unit"),
+    ARTIFACT(8, "artifact"),
+    TACTIC(16, "tactic");
+
+    private int gwentNumber;
+    private String gwentName;
 
     Type(int num, String name) {
-        this.num = num;
-        this.name = name;
+        this.gwentNumber = num;
+        this.gwentName = name;
     }
 
-    public int getNum() {
-        return num;
+    @Override
+    public int getGwentNumber() {
+        return gwentNumber;
     }
 
-    public String getName() {
-        return name;
+    @Override
+    public String getGwentName() {
+        return gwentName;
     }
 }
