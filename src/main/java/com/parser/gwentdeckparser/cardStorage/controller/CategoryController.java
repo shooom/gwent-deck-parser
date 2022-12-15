@@ -3,7 +3,7 @@ package com.parser.gwentdeckparser.cardStorage.controller;
 import com.parser.gwentdeckparser.cardStorage.dto.CategoriesListDto;
 import com.parser.gwentdeckparser.cardStorage.model.CategoryDocument;
 import com.parser.gwentdeckparser.cardStorage.service.CategoryMongoStorageService;
-import com.parser.gwentdeckparser.common.LocalisationEnum;
+import com.parser.gwentdeckparser.common.enums.LocalisationEnum;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;

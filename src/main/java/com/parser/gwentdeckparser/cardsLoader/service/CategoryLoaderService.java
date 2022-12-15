@@ -3,7 +3,7 @@ package com.parser.gwentdeckparser.cardsLoader.service;
 import com.parser.gwentdeckparser.cardStorage.model.CategoryDocument;
 import com.parser.gwentdeckparser.cardStorage.model.embedded.EmbeddedTranslation;
 import com.parser.gwentdeckparser.cardStorage.service.CategoryMongoStorageService;
-import com.parser.gwentdeckparser.common.LocalisationEnum;
+import com.parser.gwentdeckparser.common.enums.LocalisationEnum;
 import com.parser.gwentdeckparser.deckStructure.deckBuilder.Card;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;

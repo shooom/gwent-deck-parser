@@ -1,4 +1,4 @@
-package com.parser.gwentdeckparser.common;
+package com.parser.gwentdeckparser.common.enums;
 
 public enum LocalisationEnum {
 

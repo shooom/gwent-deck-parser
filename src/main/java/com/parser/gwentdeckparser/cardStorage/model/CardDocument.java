@@ -1,7 +1,7 @@
 package com.parser.gwentdeckparser.cardStorage.model;
 
 import com.parser.gwentdeckparser.cardStorage.model.embedded.CardTranslation;
-import com.parser.gwentdeckparser.common.LocalisationEnum;
+import com.parser.gwentdeckparser.common.enums.LocalisationEnum;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.Setter;
