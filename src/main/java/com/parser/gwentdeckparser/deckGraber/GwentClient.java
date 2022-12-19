@@ -7,7 +7,9 @@ import com.parser.gwentdeckparser.exceptions.GwentParserException;
 import com.squareup.moshi.JsonAdapter;
 import com.squareup.moshi.JsonDataException;
 import lombok.RequiredArgsConstructor;
-import okhttp3.*;
+import okhttp3.HttpUrl;
+import okhttp3.OkHttpClient;
+import okhttp3.Request;
 import org.springframework.stereotype.Component;
 
 import java.io.IOException;
@@ -75,7 +77,8 @@ public class GwentClient {
                 .parse(GWENT_URL + "/" + filters.get("locale") + "/" + DECK_BUILDER).newBuilder();
 
         if (!filters.isEmpty()) {
-            filters.entrySet().forEach(qp -> cardUrl.addQueryParameter(qp.getKey(), qp.getValue()));
+            filters.entrySet()
+                    .forEach(qp -> cardUrl.addQueryParameter(qp.getKey(), qp.getValue()));
         }
 
         var req = new Request.Builder().url(cardUrl.build().toString()).build();

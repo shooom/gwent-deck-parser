@@ -8,7 +8,7 @@ public class BaseGwentEntity {
     private String id;
 
     /**
-     * Unique value (number, word) from Gwent site
+     * Unique value (number, word) from Gwent's site
      */
     @Field("gwent_id")
     private String gwentObjectId;
