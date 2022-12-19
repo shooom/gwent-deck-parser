@@ -41,4 +41,8 @@ public class Card {
     private CardImagesBlock previewImages;
     @Json(name = "slot_img_path")
     private CardImagesBlock slotImages;
+
+    //links to connected cards
+    @Json(name = "connected_cards")
+    private List<CardContainer> connectedCards;
 }

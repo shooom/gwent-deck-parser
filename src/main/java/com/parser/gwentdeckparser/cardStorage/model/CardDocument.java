@@ -35,6 +35,9 @@ public class CardDocument extends BaseGwentEntity {
     private int power;
     private int rarity;
 
+    @DBRef(lazy = true)
+    private List<CardDocument> connectedCards;
+
     public CardDocument() {
         this.translations = new HashMap<>();
     }
